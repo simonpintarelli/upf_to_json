@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="upf_to_json",
-    version="0.9.1",
+    version="0.9.2",
     author="Simon Pintarelli",
     author_email="simon.pintarelli@cscs.ch",
     description="upf to json converter",
@@ -18,5 +18,12 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
-    ]
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Topic :: Scientific/Engineering"
+    ],
+    install_requires="six"
 )
