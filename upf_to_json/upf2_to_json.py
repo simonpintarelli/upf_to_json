@@ -59,6 +59,13 @@ def parse_radial_grid(upf_dict, root):
             print('Wrong number of radial points')
     except KeyError:
         print('Warning missing size field in attributes')
+
+    # check if length corresponds to header
+    if len(rg) != upf_dict['header']['mesh_size']:
+        print('Warning real grid size does not match header!')
+        print('\s > corrected .pseudo_potential.header.mesh_size ...')
+        upf_dict['header']['mesh_size'] = len(rg)
+
     upf_dict['radial_grid'] = rg
 
 
