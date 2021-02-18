@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="upf_to_json",
-    version="0.9.2",
+    version="0.9.3",
     author="Simon Pintarelli",
     author_email="simon.pintarelli@cscs.ch",
     description="upf to json converter",
