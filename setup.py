@@ -14,6 +14,12 @@ setuptools.setup(
     data_files=[("", ["LICENSE"])],
     url="https://github.com/simonpintarelli/upf_to_json",
     packages=setuptools.find_packages(),
+    install_requires=['Click'],
+    entry_points={
+        'console_scripts': [
+            'upf2json = upf_to_json.upf_to_json:cli'
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",
@@ -27,4 +33,5 @@ setuptools.setup(
         "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering"
     ]
+
 )
