@@ -2,8 +2,8 @@ import json
 import sys
 import re
 import os
-from upf1_to_json import parse_upf1_from_string
-from upf2_to_json import parse_upf2_from_string
+from .upf1_to_json import parse_upf1_from_string
+from .upf2_to_json import parse_upf2_from_string
 
 def get_upf_version(upf):
     line = upf.split('\n')[0]
@@ -21,6 +21,23 @@ def parse_upf_from_string(upf_str):
         return parse_upf1_from_string(upf_str)
     if version == 2:
         return parse_upf2_from_string(upf_str)
+
+def upf_to_json(upf_str, fname):
+    """Convert UPF to python dictionary.
+
+    :param upf_str: upf as string
+    :param fname: filename of the original .UPF file
+    """
+    version = get_upf_version(upf_str)
+    if version == 0:
+        return None
+    if version == 1:
+        pp_dict = parse_upf1_from_string(upf_str)
+    if version == 2:
+        pp_dict = parse_upf2_from_string(upf_str)
+
+    pp_dict['pseudo_potential']['header']['original_upf_file'] = fname
+    return pp_dict
 
 def main():
 
