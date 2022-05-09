@@ -22,6 +22,8 @@ import sys
 import re
 import xml.etree.ElementTree as ET
 
+def warning(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
@@ -50,9 +52,9 @@ def parse_radial_grid(upf_dict, root):
     try:
         np = int(node.attrib['size'])
         if np != len(rg):
-            print("Wrong number of radial points")
+            warning("Wrong number of radial points")
     except KeyError:
-        print('Warning: missing size field in attributes ' + str(node))
+        warning('Warning: missing size field in attributes ' + str(node))
     upf_dict['radial_grid'] = rg
 
 
@@ -119,7 +121,7 @@ def parse_non_local(upf_dict, root):
     node = root.findall('./PP_NONLOCAL/PP_AUGMENTATION')[0]
 
     if not node.attrib['q_with_l'].lower() in ['t', 'true']:
-        print("Don't know how to parse this 'q_with_l != T'")
+        warning("Don't know how to parse this 'q_with_l != T'")
         sys.exit(0)
 
     upf_dict['augmentation'] = []
@@ -147,7 +149,7 @@ def parse_non_local(upf_dict, root):
                     qij['angular_momentum'] = int(
                         node.attrib['angular_momentum'])
                     if l != qij['angular_momentum']:
-                        print("Wrong angular momentum for Qij")
+                        warning("Wrong angular momentum for Qij")
                         sys.exit(0)
                     upf_dict['augmentation'].append(qij)
 
@@ -214,7 +216,7 @@ def parse_PAW(upf_dict, root):
         upf_dict['header']["paw_core_energy"] = float(
             node.attrib['core_energy']) / 2  # convert to Ha
     except KeyError:
-        print('WARNING: PP_PAW has no core_energy set!')
+        warning('WARNING: PP_PAW has no core_energy set!')
 
     # ---- occupation
     node = root.findall("./PP_PAW/PP_OCCUPATIONS")[0]
@@ -225,7 +227,7 @@ def parse_PAW(upf_dict, root):
         size = int(node.attrib['size'])
     except KeyError:
         size = len(upf_dict['paw_data']['occupations'])
-        print('WARNING: the size attribute in PP_PAW/PP_OCCUPATIONS is missing')
+        warning('WARNING: the size attribute in PP_PAW/PP_OCCUPATIONS is missing')
     assert len(upf_dict['paw_data']['occupations']) == size
 
     # ---- Read AE core correction (density of core charge)
@@ -237,7 +239,7 @@ def parse_PAW(upf_dict, root):
         size = int(node.attrib['size'])
     except KeyError:
         size = len(upf_dict['paw_data']['ae_core_charge_density'])
-        print('WARNING: the size attribute in PP_PAW/PP_AE_NLCC is missing')
+        warning('WARNING: the size attribute in PP_PAW/PP_AE_NLCC is missing')
     assert len(upf_dict['paw_data']['ae_core_charge_density']) == size
 
     # ---- Read AE local potential
@@ -250,7 +252,7 @@ def parse_PAW(upf_dict, root):
         size = int(node.attrib['size'])
     except KeyError:
         size = len(upf_dict['paw_data']['ae_local_potential'])
-        print('WARNING: the size attribute in PP_PAW/PP_AE_VLOC is missing')
+        warning('WARNING: the size attribute in PP_PAW/PP_AE_VLOC is missing')
     assert len(upf_dict['paw_data']['ae_local_potential']) == size
 ####################################################
 ############# Read starting wave functions #########
@@ -319,9 +321,9 @@ def parse_upf2_from_string(upf2_str):
         try:
             np = int(node.attrib['size'])
             if np != len(rc):
-                print("Wrong number of points")
+                warning("Wrong number of points")
         except KeyError:
-            print('Warning: missing size field in attributes ' + str(node))
+            warning('Warning: missing size field in attributes ' + str(node))
         upf_dict['core_charge_density'] = rc
 
     # local part of potential
@@ -330,9 +332,9 @@ def parse_upf2_from_string(upf2_str):
     try:
         np = int(node.attrib['size'])
         if np != len(vloc):
-            print("Wrong number of points")
+            warning("Wrong number of points")
     except KeyError:
-        print('Warning: missing size field in attributes ' + str(node))
+        warning('Warning: missing size field in attributes ' + str(node))
     upf_dict['local_potential'] = vloc
 
     # non-local part of potential
@@ -353,9 +355,9 @@ def parse_upf2_from_string(upf2_str):
     try:
         np = int(node.attrib['size'])
         if np != len(rho):
-            print("Wrong number of points")
+            warning("Wrong number of points")
     except KeyError:
-        print('Warning: missing size field in attributes ' + str(node))
+        warning('Warning: missing size field in attributes ' + str(node))
     upf_dict['total_charge_density'] = rho
 
     pp_dict = {}
