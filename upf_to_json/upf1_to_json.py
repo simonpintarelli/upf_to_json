@@ -22,11 +22,14 @@ import sys
 import re
 import io
 
+def warning(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
 def read_until(fin, tag):
     while True:
         line = fin.readline()
         if not line:
-            print ("Unexpected end of file")
+            warning ("Unexpected end of file")
             sys.exit(-1)
         if tag in line: return
 
@@ -40,7 +43,6 @@ def read_mesh_data(in_file, npoints):
 
 def parse_header(upf_dict, upf_str):
 
-    #print "parsing header"
 
     upf_dict["header"] = {}
     upf = io.StringIO(upf_str)
@@ -98,7 +100,6 @@ def parse_header(upf_dict, upf_str):
 #
 def parse_mesh(upf_dict, upf_str):
 
-    #print "parsing mesh"
 
     upf = io.StringIO(upf_str)
     read_until(upf, "<PP_R>")
@@ -126,7 +127,6 @@ def parse_mesh(upf_dict, upf_str):
 #
 def parse_nlcc(upf_dict, upf_str):
 
-    #print "parsing nlcc"
 
     upf = io.StringIO(upf_str)
     read_until(upf, "<PP_NLCC>")
@@ -143,8 +143,6 @@ def parse_nlcc(upf_dict, upf_str):
 # QE subroutine read_pseudo_local
 #
 def parse_local(upf_dict, upf_str):
-
-    #print "parsing local"
 
     upf_dict['local_potential'] = []
     upf = io.StringIO(upf_str)
@@ -164,8 +162,6 @@ def parse_local(upf_dict, upf_str):
 # QE subroutine read_pseudo_nl
 #
 def parse_non_local(upf_dict, upf_str):
-
-    #print "parsing non-local"
 
     upf_dict['beta_projectors'] = []
     upf_dict['D_ion'] = []
@@ -299,7 +295,7 @@ def parse_non_local(upf_dict, upf_str):
 
             s = upf.readline().split()
             if int(s[2]) != lj:
-                print("inconsistent angular momentum")
+                warning("inconsistent angular momentum")
                 sys.exit(-1)
 
             if int(s[0]) != i + 1 or int(s[1]) != j + 1:
@@ -362,7 +358,6 @@ def parse_non_local(upf_dict, upf_str):
 #
 def parse_pswfc(upf_dict, upf_str):
 
-    #print "parsing wfc"
 
     upf_dict['atomic_wave_functions'] = []
 
@@ -393,7 +388,6 @@ def parse_pswfc(upf_dict, upf_str):
 #
 def parse_rhoatom(upf_dict, upf_str):
 
-    #print "parsing rhoatm"
     upf = io.StringIO(upf_str)
     read_until(upf, "<PP_RHOATOM>")
 
