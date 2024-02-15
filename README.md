@@ -8,3 +8,6 @@ DFT library [SIRIUS github](https://github.com/electronic-structure/SIRIUS).
 
 More information about the unified pseudopotential format can be found here:
 https://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format
+
+
+## CLI interface
