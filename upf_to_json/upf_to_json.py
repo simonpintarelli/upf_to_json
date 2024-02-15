@@ -6,10 +6,10 @@ from .upf1_to_json import parse_upf1_from_string
 from .upf2_to_json import parse_upf2_from_string
 
 def get_upf_version(upf):
-    line = upf.split('\n')[0]
-    if "<PP_INFO>" in line:
+    lines = upf.split('\n')
+    if "<PP_INFO>" in lines[0]:
         return 1
-    elif "UPF version" in line:
+    elif "UPF version" in lines[0] or "UPF version" in lines[1]:
         return 2
     return 0
 
