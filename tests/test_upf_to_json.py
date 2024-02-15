@@ -33,3 +33,7 @@ def test_atompaw():
 def test_pslibrary_paw():
     fname = 'Al.pbe-n-kjpaw_psl.1.0.0.UPF'
     call_upf2json(fname)
+
+def test_pslibrary_new():
+    fname = 'Ac.us.z_11.ld1.psl.v1.0.0-high.upf'
+    call_upf2json(fname)
