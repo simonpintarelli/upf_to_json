@@ -47,3 +47,30 @@ def convert(infile, outfile):
 def summary(infile):
     pp_dict = upf_to_json(infile.read(), fname=infile.name)
     click.echo(json.dumps(pp_dict['pseudo_potential']['header'], indent=2))
+
+    try:
+        cutoff_index = pp_dict['pseudo_potential']['header']['cutoff_radius_index']
+        click.echo('cutoff: {:.3f} a.u.'.format(pp_dict['pseudo_potential']['radial_grid'][cutoff_index]))
+    except KeyError:
+        # cutoff_radius_index not in header
+        pass
+    # lmax
+
+    paw_lmax = 0
+    if 'paw_data' in pp_dict['pseudo_potential']:
+        paw_data = pp_dict['pseudo_potential']['paw_data']
+        paw_lmax  = max([wfc['angular_momentum'] for wfc in paw_data['ae_wfc']] +
+                        [wfc['angular_momentum'] for wfc in paw_data['ps_wfc']])
+
+
+    aug_lmax = max([aug['angular_momentum'] for aug in pp_dict['pseudo_potential']['augmentation']])
+    try:
+        print([x['label'] for x in pp_dict['pseudo_potential']['beta_projectors']])
+    except KeyError:
+        print('beta projectors aren\'t labelled')
+
+    print('\n')
+    print(f'lmax (aug)            : {aug_lmax}')
+    if 'paw_data' in pp_dict['pseudo_potential']:
+        print(f'lmax (paw)            : {paw_lmax}')
+    print('lmax (beta-projectors): {}'.format(max([x['angular_momentum'] for x in pp_dict['pseudo_potential']['beta_projectors']])))
