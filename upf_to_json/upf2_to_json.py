@@ -190,7 +190,8 @@ def parse_PAW(upf_dict, root):
         node = root.findall("./PP_FULL_WFC/PP_AEWFC.%i" % (i + 1))[0]
         wfc["radial_function"] = [float(e) for e in str.split(node.text)]
         wfc["angular_momentum"] = int(node.attrib["l"])
-        # wfc['label'] = node.attrib['label']
+        if "label" in node.attrib:
+            wfc["label"] = node.attrib["label"]
         # wfc['index'] =  int(node.attrib['index']) - 1
         upf_dict["paw_data"]["ae_wfc"].append(wfc)
 
@@ -202,7 +203,8 @@ def parse_PAW(upf_dict, root):
         node = root.findall("./PP_FULL_WFC/PP_PSWFC.%i" % (i + 1))[0]
         wfc["radial_function"] = [float(e) for e in str.split(node.text)]
         wfc["angular_momentum"] = int(node.attrib["l"])
-        # wfc['label'] = node.attrib['label']
+        if "label" in node.attrib:
+            wfc["label"] = node.attrib["label"]
         # wfc['index'] =  int(node.attrib['index']) - 1
         upf_dict["paw_data"]["ps_wfc"].append(wfc)
 
@@ -264,7 +266,8 @@ def parse_pswfc(upf_dict, root):
         node = root.findall("./PP_PSWFC/PP_CHI.%i" % (i + 1))[0]
         wfc["radial_function"] = [float(e) for e in str.split(node.text)]
         wfc["angular_momentum"] = int(node.attrib["l"])
-        # wfc['label'] = node.attrib['label']
+        if "label" in node.attrib:
+            wfc["label"] = node.attrib["label"]
         wfc["occupation"] = float(node.attrib["occupation"])
         if upf_dict["header"]["spin_orbit"]:
             node = root.findall("./PP_SPIN_ORB/PP_RELWFC.%i" % (i + 1))[0]
