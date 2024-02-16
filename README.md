@@ -11,3 +11,14 @@ https://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format
 
 
 ## CLI interface
+
+```
+Usage: upf2json [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  convert
+  summary
+```
