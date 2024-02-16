@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "upf_to_json"
-version = "0.9.5"
+version = "1.0.0"
 authors = [
     {name = "Simon Pintarelli", email = "simon.pintarelli@cscs.ch"}
 ]
