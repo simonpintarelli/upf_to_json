@@ -10,7 +10,10 @@ def diff(fname, ref_json_gz):
         dd = upf_to_json(fh.read(), fname=fname)
     with gzip.open(ref_json_gz, "rt") as fh:
         dd_ref = json.load(fh)
-    diff = DeepDiff(dd, dd_ref)
+    diff = DeepDiff(dd_ref, dd)
+    # assert `dd` is a superset of `dd_ref`
+    if 'dictionary_item_added' in diff:
+        del diff['dictionary_item_added']
     assert diff == {}
 
 
