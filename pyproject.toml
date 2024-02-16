@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "upf_to_json"
+version = "0.9.5"
+authors = [
+    {name = "Simon Pintarelli", email = "simon.pintarelli@cscs.ch"}
+]
+description = "upf to json converter"
+readme = "README.md"
+license = {file = "LICENSE"}
+urls = {"Homepage" = "https://github.com/simonpintarelli/upf_to_json"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering"
+]
+
+dependencies = [
+    "Click"
+]
+
+[project.optional-dependencies]
+test = ["deepdiff", "pytest"]
+
+[project.scripts]
+upf2json = "upf_to_json.upf_to_json:cli"
