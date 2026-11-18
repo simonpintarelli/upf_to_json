@@ -3,12 +3,15 @@ import pytest
 from upf_to_json import upf_to_json
 from deepdiff import DeepDiff
 import gzip, json
+from pathlib import Path
+
+DATA_DIR = Path(__file__).parent
 
 
 def diff(fname, ref_json_gz):
-    with open(fname, "r") as fh:
+    with open(DATA_DIR / fname, "r") as fh:
         dd = upf_to_json(fh.read(), fname=fname)
-    with gzip.open(ref_json_gz, "rt") as fh:
+    with gzip.open(DATA_DIR / ref_json_gz, "rt") as fh:
         dd_ref = json.load(fh)
     diff = DeepDiff(dd_ref, dd)
     # assert `dd` is a superset of `dd_ref`
