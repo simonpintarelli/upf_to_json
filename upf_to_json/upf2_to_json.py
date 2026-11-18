@@ -222,6 +222,8 @@ def parse_PAW(upf_dict, root):
     upf_dict["paw_data"]["occupations"] = [float(e) for e in str.split(node.text)]
     try:
         size = int(node.attrib["size"])
+        if size != upf_dict["header"]["number_of_proj"]:
+            warning("WARNING: number_of_proj != size(PP_OCCUPATIONS)")
     except KeyError:
         size = len(upf_dict["paw_data"]["occupations"])
         warning("WARNING: the size attribute in PP_PAW/PP_OCCUPATIONS is missing")
@@ -234,6 +236,8 @@ def parse_PAW(upf_dict, root):
     ]
     try:
         size = int(node.attrib["size"])
+        if size != upf_dict["header"]["mesh_size"]:
+            warning("WARNING: mesh_size != size(PP_AE_NLCC)")
     except KeyError:
         size = len(upf_dict["paw_data"]["ae_core_charge_density"])
         warning("WARNING: the size attribute in PP_PAW/PP_AE_NLCC is missing")
@@ -247,6 +251,8 @@ def parse_PAW(upf_dict, root):
     ]  # convert to Ha
     try:
         size = int(node.attrib["size"])
+        if size != upf_dict["header"]["mesh_size"]:
+            warning("WARNING: mesh_size != size(PP_AE_VLOC)")
     except KeyError:
         size = len(upf_dict["paw_data"]["ae_local_potential"])
         warning("WARNING: the size attribute in PP_PAW/PP_AE_VLOC is missing")

@@ -31,6 +31,7 @@ def upf_to_json(upf_str, fname):
 
 
 @click.group()
+@click.version_option(package_name="upf_to_json")
 def cli():
     pass
 
