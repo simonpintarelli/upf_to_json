@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "upf_to_json"
-version = "1.0.0"
+version = "1.0.1"
 description = "upf to json converter"
 readme = "README.md"
 requires-python = ">=3.10"
