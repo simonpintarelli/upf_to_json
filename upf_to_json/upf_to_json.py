@@ -33,13 +33,14 @@ def upf_to_json(upf_str, fname):
 @click.group()
 @click.version_option(package_name="upf_to_json")
 def cli():
-    pass
+    """Convert UPF v1/v2 pseudopotentials to SIRIUS JSON."""
 
 
 @cli.command()
 @click.argument("infile", type=click.File(mode="r"))
 @click.argument("outfile", type=click.File(mode="w"), default="-")
 def convert(infile, outfile):
+    """Convert UPF file INFILE to JSON (OUTFILE, default: stdout)."""
     pp_dict = upf_to_json(infile.read(), fname=infile.name)
     outfile.write(json.dumps(pp_dict))
 
@@ -47,6 +48,7 @@ def convert(infile, outfile):
 @cli.command()
 @click.argument("infile", type=click.File(mode="r"))
 def summary(infile):
+    """Print header, cutoff radius and lmax info of INFILE."""
     pp_dict = upf_to_json(infile.read(), fname=infile.name)
     click.echo(json.dumps(pp_dict["pseudo_potential"]["header"], indent=2))
 
