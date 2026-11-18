@@ -1,21 +1,44 @@
 name: Tests
-on: [push]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
     steps:
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.11'
       - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: Install via pip and try if import works, test UPF conversion
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+      - name: Install package with test extras
         run: |
           python -m pip install --upgrade pip
           pip install -e .[test]
-          pip install pytest
+      - name: Check import and CLI entry point
+        run: |
           python -c 'from upf_to_json import upf_to_json'
-          (
-          cd tests
-          python -m pytest .
-          )
+          upf2json --help
+      - name: Run tests
+        run: python -m pytest -v
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build sdist and wheel
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build
+      - name: Check distribution metadata
+        run: twine check --strict dist/*
