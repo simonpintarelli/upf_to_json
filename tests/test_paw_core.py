@@ -2,7 +2,6 @@
 
 import copy
 from ctypes.util import find_library
-import importlib
 import io
 import json
 import math
@@ -15,11 +14,7 @@ import xml.etree.ElementTree as ET
 from click.testing import CliRunner
 
 from upf_to_json.upf2_to_json import add_paw_core_kinetic_density, parse_PAW
-from upf_to_json.upf_to_json import cli
-
-# The package re-exports the function upf_to_json, which shadows the submodule
-# of the same name; resolve the module explicitly (needed by mock on 3.10).
-cli_module = importlib.import_module('upf_to_json.upf_to_json')
+from upf_to_json.cli import cli
 
 
 class PawCoreTest(unittest.TestCase):
@@ -180,8 +175,8 @@ class PawCoreTest(unittest.TestCase):
         ET.ElementTree(self.root).write(self.path)
         args = ['convert', str(upf), str(output)]
         runner = CliRunner()
-        with patch.object(cli_module, 'upf_to_json',
-                          side_effect=lambda *_, **__: copy.deepcopy(self.data)):
+        with patch('upf_to_json.cli.upf_to_json',
+                   side_effect=lambda *_, **__: copy.deepcopy(self.data)):
             result = runner.invoke(cli, args)
             self.assertEqual(result.exit_code, 0, result.output)
             plain = json.loads(output.read_text())['pseudo_potential']
