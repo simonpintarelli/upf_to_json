@@ -1,5 +1,3 @@
-import pytest
-
 from upf_to_json import upf_to_json
 from deepdiff import DeepDiff
 import gzip, json

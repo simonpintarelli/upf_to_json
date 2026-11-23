@@ -1,5 +1,9 @@
 from .upf1_to_json import parse_upf1_from_string
-from .upf2_to_json import parse_upf2_from_string
+from .upf2_to_json import (
+    parse_upf2_from_string,
+    add_paw_core_kinetic_density,
+    add_kinetic_augmentation,
+)
 import json
 import click
 
@@ -37,11 +41,36 @@ def cli():
 
 
 @cli.command()
-@click.argument("infile", type=click.File(mode="r"))
+@click.argument("infile", type=click.File(mode="rb"))
 @click.argument("outfile", type=click.File(mode="w"), default="-")
-def convert(infile, outfile):
+@click.option(
+    "--paw-core-xml",
+    type=click.Path(exists=True, dir_okay=False),
+    help="Matching ATOMPAW XML with AE and pseudo core kinetic densities.",
+)
+@click.option(
+    "--kinetic-augmentation-json",
+    type=click.Path(exists=True, dir_okay=False),
+    help="Generator-supplied ultrasoft r^2 T_ij^L tables matched by the UPF SHA-256.",
+)
+def convert(infile, outfile, paw_core_xml, kinetic_augmentation_json):
     """Convert UPF file INFILE to JSON (OUTFILE, default: stdout)."""
-    pp_dict = upf_to_json(infile.read(), fname=infile.name)
+    # keep the raw text (original line endings) for the SHA-256 check
+    upf_raw = infile.read().decode("utf-8")
+    upf_str = upf_raw.replace("\r\n", "\n").replace("\r", "\n")
+    pp_dict = upf_to_json(upf_str, fname=infile.name)
+    if paw_core_xml:
+        try:
+            add_paw_core_kinetic_density(pp_dict, paw_core_xml)
+        except (ValueError, RuntimeError, OSError) as error:
+            raise click.BadParameter(str(error), param_hint="--paw-core-xml")
+    if kinetic_augmentation_json:
+        try:
+            add_kinetic_augmentation(pp_dict, upf_raw, kinetic_augmentation_json)
+        except (ValueError, RuntimeError, OSError) as error:
+            raise click.BadParameter(
+                str(error), param_hint="--kinetic-augmentation-json"
+            )
     outfile.write(json.dumps(pp_dict))
 
 
