@@ -54,6 +54,12 @@ Commands:
 # convert, writing to a file (omit OUTFILE to write to stdout)
 upf2json convert Al.pbe-n-kjpaw_psl.1.0.0.UPF Al.json
 
+# PAW: import core kinetic energy densities from the matching ATOMPAW PAW-XML
+upf2json convert C.paw.UPF C.json --paw-core-xml C.atompaw.xml
+
+# US: import generator-supplied kinetic augmentation (JSON keyed by the UPF SHA-256)
+upf2json convert C.us.UPF C.json --kinetic-augmentation-json C.kinetic.json
+
 # inspect a pseudopotential: header fields, cutoff radius, lmax
 upf2json summary Al.pbe-n-kjpaw_psl.1.0.0.UPF
 
